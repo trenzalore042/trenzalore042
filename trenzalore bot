@@ -1,0 +1,29 @@
+from flask import Flask, request
+from twilio.twiml.messaging_response import MessagingResponse
+
+app = Flask(__name__)
+
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    # Get the incoming message
+    incoming_message = request.form.get('Body')
+    
+    # Process the message and generate a response
+    response = process_message(incoming_message)
+    
+    # Create a TwiML response
+    twiml = MessagingResponse()
+    twiml.message(response)
+    
+    return str(twiml)
+
+def process_message(message):
+    # Implement your bot's logic here
+    # You can use conditional statements to determine the response
+    if "hello" in message.lower():
+        return "Hello! This is your WhatsApp bot."
+    else:
+        return "I didn't understand your message."
+
+if __name__ == "__main__":
+    app.run()
